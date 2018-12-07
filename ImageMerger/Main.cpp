@@ -20,7 +20,7 @@ double calcScale(double sizeX, double sizeY)
 void Main()
 {
 	Array<Texture> textures;
-	Window::Resize(500, 500);
+	Window::Resize(300, 300);
 	while (System::Update())
 	{
 		if (textures.size() <= 3 && DragDrop::HasNewFilePaths())
