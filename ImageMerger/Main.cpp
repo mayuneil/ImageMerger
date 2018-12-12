@@ -4,8 +4,8 @@ double calcScale(double sizeX, double sizeY)
 {
 	double scaleX = 1.0;
 	double scaleY = 1.0;
-	const double maxWidth = 1280;
-	const double maxHeight = 720;
+	const double maxWidth = 300;
+	const double maxHeight = 150;
 	if (maxWidth < sizeX)
 	{
 		scaleX = maxWidth/ sizeX;
@@ -37,48 +37,28 @@ void Main()
 		}
 
 		const int numOfTextures = textures.size();
-		if (numOfTextures == 1)
+		double sumOfheight = 0;
+		int width = 0;
+		int height = 0;
+		double scale = 0;
+		double maxwidth = 0;
+		for (int a = 0; a < numOfTextures; a++)
 		{
-			const int width = textures[0].width();
-			const int height = textures[0].height();
-			const double scale = calcScale(width, height);
-			textures[0].scaled(scale).draw();
-			Window::Resize(width * scale, height * scale);
-		} 
-		else if (numOfTextures == 2)
-		{
-			const int width = textures[0].width() + textures[1].width();
-			const int height = textures[0].height();
-			const double scale = calcScale(width, height);
-			const Vec2 center = scale * Vec2(textures[0].width(), Max(textures[0].height(), textures[1].height()));
-			textures[0].scaled(scale).drawAt(center.movedBy(-textures[0].width()*scale / 2, -textures[1].height()*scale / 2));
-			textures[1].scaled(scale).drawAt(center.movedBy(textures[1].width()*scale/2, -textures[1].height()*scale / 2));
-			Window::Resize(width * scale, height * scale);
+			width = textures[a].width();
+			height = textures[a].height();
+			scale = calcScale(width, height);
+			textures[a].scaled(scale).draw(0, sumOfheight);
+			if (maxwidth < scale*width) 
+			{
+				maxwidth = scale*width;
+			}
+			sumOfheight += scale*height;
 		}
-		else if (numOfTextures == 3)
+		if (Window::Height() < sumOfheight)
 		{
-			const int width = Max(textures[0].width() + textures[1].width(), textures[2].width());
-			const int height = textures[0].height() + textures[2].height();
-			const double scale = calcScale(width, height);
-			const Vec2 center = scale * Vec2(Max(textures[0].width(), textures[2].width()), Max(textures[0].height(), textures[1].height()));
-			textures[0].scaled(scale).draw();
-			textures[1].scaled(scale).drawAt(center.movedBy(textures[1].width()*scale / 2, -textures[1].height()*scale / 2));
-			textures[2].scaled(scale).drawAt(center.movedBy(-textures[2].width()*scale / 2, textures[2].height()*scale / 2));
-			Window::Resize(width * scale, height * scale);
+			Window::Resize(maxwidth , sumOfheight);
 		}
-		else if (numOfTextures == 4)
-		{
-			const int width = Max(textures[0].width() + textures[1].width(), 
-				textures[2].width() + textures[3].width());
-			const int height = Max(textures[0].height() + textures[2].height(),
-				textures[1].height() + textures[3].height());
-			const double scale = calcScale(width, height);
-			const Vec2 center = scale * Vec2(Max(textures[0].width(), textures[2].width()), Max(textures[0].height(), textures[1].height()));
-			textures[0].scaled(scale).draw();
-			textures[1].scaled(scale).drawAt(center.movedBy(textures[1].width()*scale / 2, -textures[1].height()*scale / 2));
-			textures[2].scaled(scale).drawAt(center.movedBy(-textures[2].width()*scale / 2, textures[2].height()*scale / 2));
-			textures[3].scaled(scale).drawAt(center.movedBy(textures[3].width()*scale / 2, textures[3].height()*scale / 2));
-			Window::Resize(width * scale, height * scale);
-		}
+
+
 	}
 }
