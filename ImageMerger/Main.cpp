@@ -58,7 +58,5 @@ void Main()
 		{
 			Window::Resize(maxwidth , sumOfheight);
 		}
-
-
 	}
 }
